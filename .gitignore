@@ -1,0 +1,42 @@
+# Notes and documentation — not part of the delivered system. README.md is
+# the exception: it is the repository's front page and must be tracked.
+*.md
+!README.md
+
+# Python bytecode.
+__pycache__/
+*.pyc
+*.pyo
+
+# Front-end dependencies; restored by `npm install`.
+node_modules/
+
+# Source maps expose unminified source and add ~5.5 MB.
+*.map
+
+# Runtime database and its journals.
+data/*.db
+data/*.db-wal
+data/*.db-shm
+data/*.backup-*
+
+# TLS material tied to this machine. The key must never be committed.
+data/cert.pem
+data/key.pem
+data/cert.host
+
+# The packaged delivery copy is a build output, not source. This pattern only
+# bites if the repo root is `Project Final`; if you `git init` inside
+# AgenticWarehouse, the copy sits outside the repo and needs no rule.
+AgenticWarehouse_Final/
+
+# Editor and OS noise.
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+*.tmp
+*.bak
+*~
