@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Connect a phone — Agentic Warehouse</title>
+<!--
+  Connect a phone
+  ===============
+  Open this on the machine running the server; scan the code with the phone.
+
+  Everything on this page is inlined. No stylesheet, no script and no image is
+  fetched from anywhere: the QR below is SVG the Python server rendered with
+  core/qrcode.py before it sent the page. That matters more here than anywhere
+  else in the system, because this is the one screen someone opens when the
+  network is not behaving.
+-->
+<style>
+  :root {
+    --bg: #0b0f14; --card: #131922; --line: #1f2937; --fg: #e6edf3;
+    --dim: #94a3b8; --ok: #22c55e; --warn: #f59e0b; --accent: #3b82f6;
+    --radius: 12px;
+  }
+  @media (prefers-color-scheme: light) {
+    :root { --bg:#f6f8fa; --card:#fff; --line:#d8dee4; --fg:#111820; --dim:#57606a; }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px 20px 64px;
+    background: var(--bg); color: var(--fg);
+    font: 15px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 24px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  h2 { font-size: 15px; margin: 0 0 12px; text-transform: uppercase;
+       letter-spacing: .06em; color: var(--dim); }
+  p { margin: 0 0 12px; }
+  .lede { color: var(--dim); margin-bottom: 28px; }
+  .card { background: var(--card); border: 1px solid var(--line);
+          border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
+  .banner { display: flex; gap: 14px; align-items: flex-start;
+            border-radius: var(--radius); padding: 16px 18px; margin-bottom: 24px;
+            border: 1px solid; }
+  .banner.ok   { border-color: color-mix(in srgb, var(--ok) 35%, transparent);
+                 background: color-mix(in srgb, var(--ok) 10%, transparent); }
+  .banner.warn { border-color: color-mix(in srgb, var(--warn) 40%, transparent);
+                 background: color-mix(in srgb, var(--warn) 12%, transparent); }
+  .banner strong { display: block; margin-bottom: 2px; }
+  .banner .dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 7px;
+                 flex: 0 0 auto; }
+  .banner.ok .dot { background: var(--ok); }
+  .banner.warn .dot { background: var(--warn); }
+  .split { display: grid; gap: 20px; grid-template-columns: 260px 1fr; align-items: start; }
+  @media (max-width: 700px) { .split { grid-template-columns: 1fr; } }
+  .qr { background: #fff; border-radius: var(--radius); padding: 14px; line-height: 0; }
+  .qr svg { width: 100%; height: auto; display: block; }
+  .url { font: 600 19px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+         word-break: break-all; background: rgba(127,127,127,.12);
+         border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px;
+         margin: 0 0 14px; user-select: all; }
+  ol { margin: 0; padding-left: 20px; }
+  ol li { margin-bottom: 10px; }
+  code { font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+         background: rgba(127,127,127,.15); border-radius: 5px; padding: 2px 6px; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line);
+           vertical-align: top; }
+  th { color: var(--dim); font-weight: 600; font-size: 13px;
+       text-transform: uppercase; letter-spacing: .05em; width: 34%; }
+  tr:last-child td, tr:last-child th { border-bottom: 0; }
+  .muted { color: var(--dim); font-size: 14px; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Connect a phone</h1>
+  <p class="lede">
+    Scan this with the phone's own camera app. It opens the warehouse in the phone's
+    browser, and the phone's camera becomes a scanner like any other.
+  </p>
+
+  {{BANNER}}
+
+  <div class="card">
+    <div class="split">
+      <div class="qr">{{QR_SVG}}</div>
+      <div>
+        <h2>Or type this in the phone's browser</h2>
+        <p class="url">{{URL}}</p>
+        <ol>
+          <li>Put the phone on the same Wi-Fi as this machine.</li>
+          <li>Scan the code, or type the address above.</li>
+          <li>{{CERT_STEP}}</li>
+          <li>Sign in, open <strong>Scanner</strong>, and press <strong>Start camera</strong>.
+              Allow camera access when the phone asks.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Checking the phone is on the same network</h2>
+    <p class="muted" style="margin-top:-4px">
+      The two devices need matching addresses, not identical ones. Compare these.
+    </p>
+    <table>
+      <tr>
+        <th>This machine</th>
+        <td>
+          <span class="url" style="font-size:16px;display:inline-block;padding:8px 12px">{{LAN_IP}}</span>
+          <br />Found with <code>ipconfig</code> in Command Prompt — read the
+          <strong>IPv4 Address</strong> of the adapter that does <em>not</em> say
+          "Media disconnected".
+        </td>
+      </tr>
+      <tr>
+        <th>The phone</th>
+        <td>
+          <strong>Android:</strong> Settings, Network &amp; internet, Wi-Fi, tap the
+          connected network, then Advanced or Details.<br />
+          <strong>iPhone:</strong> Settings, Wi-Fi, tap the small (i) beside the
+          connected network.
+        </td>
+      </tr>
+      <tr>
+        <th>What must match</th>
+        <td>
+          The phone's address must begin <span class="url"
+          style="font-size:16px;display:inline-block;padding:8px 12px">{{PREFIX}}</span>
+          and end in a <em>different</em> final number. Same first three, different
+          last one — that is what being on one network looks like. If the phone shows
+          something starting <code>172.</code> or a completely different
+          <code>10.x</code>, it is on another network: usually mobile data or a guest
+          Wi-Fi.
+        </td>
+      </tr>
+      <tr>
+        <th>The quickest test of all</th>
+        <td>Skip the numbers. Type the address at the top of this page into the phone's
+            browser. If the warehouse loads, you are on the same network — that is the
+            only thing the addresses were ever telling you.</td>
+      </tr>
+    </table>
+    <div class="banner warn" style="margin:16px 0 0">
+      <span class="dot"></span>
+      <div><strong>This address is not permanent.</strong>
+      The router hands it out and can hand out a different one after a restart, so a
+      bookmark that worked last week may point nowhere. Re-open this page for the
+      current address whenever the phone stops connecting.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Two things people expect to be true that are not</h2>
+    <table>
+      <tr>
+        <th>The phone and this machine share one IP</th>
+        <td>
+          They share a <em>network</em>, not an address. This machine is
+          <code>{{LAN_IP}}</code>; the phone has a different address on the same
+          Wi-Fi, which is exactly why it can reach this one. If the phone shows a
+          <code>192.168.x.x</code> or <code>10.x.x.x</code> address in its Wi-Fi
+          settings and this machine shows another in the same range, you are set up
+          correctly.
+        </td>
+      </tr>
+      <tr>
+        <th>The phone camera feeds this screen</th>
+        <td>
+          It does not, and nothing here streams video between the two. The phone runs
+          the whole application itself and writes to the same database over the
+          network, so a scan made on the phone appears on this machine's dashboard
+          immediately. The phone is a second workstation, not a webcam.
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>If the phone cannot open it</h2>
+    <table>
+      <tr>
+        <th>The page loads but the camera will not start</th>
+        <td>Browsers only grant camera access on a secure page. On a LAN address that
+            means HTTPS, so the server has to be started with
+            <code>python app.py --https</code>. Nothing else fixes it — it is a browser
+            rule, not a setting in this application.</td>
+      </tr>
+      <tr>
+        <th>The browser warns about the certificate</th>
+        <td>Expected, once. The certificate is generated on this machine and signed by
+            nobody, because there is no certificate authority on a warehouse LAN.
+            Choose <em>Advanced</em> and continue. It is the same machine you are
+            reading this on.</td>
+      </tr>
+      <tr>
+        <th>The address does not load at all</th>
+        <td>Usually the firewall on this machine, or guest Wi-Fi. Allow Python through
+            the firewall for private networks, and check the phone is not on a guest
+            network — most guest networks isolate devices from each other by design.</td>
+      </tr>
+      <tr>
+        <th>It worked yesterday and not today</th>
+        <td>This machine's address is handed out by the router and can change when it
+            reboots. Re-open this page for the current one, or give this machine a
+            fixed address in the router.</td>
+      </tr>
+    </table>
+  </div>
+
+  <p class="muted">
+    The phone keeps its own camera list: it registers as its own station on the
+    <strong>Cameras</strong> screen, because a camera id issued by one browser means
+    nothing in another. Configure the phone's front and back cameras from the phone.
+  </p>
+
+</div>
+</body>
+</html>

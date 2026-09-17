@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agentic Warehouse MVP — How to Run</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+<style>
+  :root{
+    --navy:#0f2140;--navy2:#1b3563;--blue:#2e5cb8;--red:#c0392b;--green:#1c7a54;
+    --amber:#b5810b;--bg:#eef1f6;--card:#fff;--line:#e3e8f0;
+    --muted:#5c6675;--ink:#1c2431;--soft:#f4f6fb;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.62;font-size:15.5px;}
+  a{color:var(--blue);}
+  .wrap{max-width:900px;margin:0 auto;padding:0 20px;}
+
+  header.hero{background:linear-gradient(135deg,var(--navy),var(--navy2) 60%,#26467e);color:#fff;
+    padding:44px 0 38px;position:relative;overflow:hidden;}
+  header.hero::after{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;
+    border-radius:50%;background:radial-gradient(circle,rgba(46,92,184,.4),transparent 70%);}
+  .badge{display:inline-block;background:var(--blue);color:#fff;font-size:12px;letter-spacing:1.3px;
+    font-weight:700;padding:6px 14px;border-radius:30px;text-transform:uppercase;}
+  header.hero h1{font-size:30px;margin:16px 0 8px;}
+  header.hero p.sub{font-size:16px;color:#c6d2e6;margin:0;}
+
+  section{padding:36px 0;border-bottom:1px solid var(--line);}
+  section:nth-of-type(even){background:#fff;}
+  h2{font-size:23px;color:var(--navy);margin:0 0 20px;display:flex;align-items:center;gap:12px;}
+  h2 i{color:var(--blue);font-size:20px;}
+  h3{font-size:17px;color:var(--navy2);margin:22px 0 8px;}
+  p{margin:0 0 13px;}
+
+  .steps{counter-reset:s;}
+  .step{display:flex;gap:16px;padding:16px 0;border-bottom:1px dashed var(--line);align-items:flex-start;}
+  .step:last-child{border-bottom:none;}
+  .step .n{counter-increment:s;flex:0 0 auto;width:40px;height:40px;border-radius:11px;
+    background:linear-gradient(135deg,var(--navy2),var(--blue));color:#fff;display:flex;
+    align-items:center;justify-content:center;font-weight:800;font-size:17px;}
+  .step .n::before{content:counter(s);}
+  .step .body{flex:1;min-width:0;}
+  .step h4{margin:6px 0 6px;font-size:16px;color:var(--navy);}
+  .step p{margin:0 0 8px;color:var(--muted);font-size:14px;}
+
+  code{background:#eef1f7;border:1px solid var(--line);border-radius:5px;padding:1px 6px;
+    font-size:13px;color:#a5322a;}
+  pre{background:#0f2140;color:#dfe8f6;padding:13px 16px;border-radius:10px;overflow-x:auto;
+    font-size:13.5px;line-height:1.55;margin:10px 0;}
+  pre code{background:none;border:none;color:inherit;padding:0;font-size:13.5px;}
+
+  .callout{border-left:5px solid var(--blue);background:#eaf0fb;padding:14px 18px;
+    border-radius:0 12px 12px 0;margin:18px 0;color:#22375c;display:flex;gap:11px;}
+  .callout i{color:var(--blue);font-size:18px;margin-top:3px;flex:0 0 auto;}
+  .callout.warn{border-color:var(--amber);background:#fdf6e3;color:#6d5200;}
+  .callout.warn i{color:var(--amber);}
+  .callout.ok{border-color:var(--green);background:#e8f5ef;color:#1a4d3c;}
+  .callout.ok i{color:var(--green);}
+  .callout p{margin:0;}
+
+  .tblwrap{overflow-x:auto;}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:14px;background:#fff;}
+  th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top;}
+  th{background:var(--soft);color:var(--navy);font-weight:700;}
+  td code{white-space:nowrap;}
+
+  footer{background:var(--navy);color:#c6d2e6;padding:26px 0;font-size:13.5px;}
+  footer .wrap{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">Agentic Warehouse MVP</span>
+    <h1>How to Run This Project</h1>
+    <p class="sub">Only Python is required. Nothing to install for the core app.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2><i class="fa-solid fa-play"></i> Run it in three steps</h2>
+
+    <div class="steps">
+      <div class="step">
+        <div class="n"></div>
+        <div class="body">
+          <h4>Check Python is installed</h4>
+          <p>Open a terminal and run this. You need 3.8 or newer.</p>
+          <pre><code>python --version</code></pre>
+          <p>If it is not found, install it from <a href="https://python.org">python.org</a>
+             and tick <strong>"Add python.exe to PATH"</strong>.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n"></div>
+        <div class="body">
+          <h4>Start the server</h4>
+          <p>From the project folder (the one holding <code>app.py</code>):</p>
+          <pre><code>python app.py</code></pre>
+          <p>On Windows you can instead double-click <code>run.bat</code>.
+             Leave the terminal open &mdash; closing it stops the server.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="n"></div>
+        <div class="body">
+          <h4>Open the dashboard</h4>
+          <p>In your browser go to:</p>
+          <pre><code>http://localhost:8000</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <div class="callout ok">
+      <i class="fa-solid fa-circle-check"></i>
+      <p>To stop the server, press <strong>Ctrl + C</strong> in the terminal.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><i class="fa-solid fa-barcode"></i> Using the app</h2>
+    <p>Toggle <strong>Stock IN</strong> or <strong>Stock OUT</strong> first &mdash; this decides what
+       the scan does. Then feed it a code in any of three ways:</p>
+
+    <div class="tblwrap">
+      <table>
+        <tr><th>Method</th><th>How</th></tr>
+        <tr><td><strong>Camera</strong></td>
+            <td>Hold a QR code or barcode up to the webcam. Allow camera access when asked.</td></tr>
+        <tr><td><strong>Sample chips</strong></td>
+            <td>Click a ready-made chip (ONT, Fiber Cable, IPTV Device, Remote, Raw Barcode). Easiest way to test.</td></tr>
+        <tr><td><strong>Manual box</strong></td>
+            <td>Type a code and press Enter. Format is <code>name,batch,productno</code> &mdash;
+                for example <code>ONT,BATCH01,900001</code>.</td></tr>
+      </table>
+    </div>
+
+    <p>Every scan runs through all five agents and the dashboard shows the verdict
+       (<strong>IN</strong>, <strong>OUT</strong>, or <strong>REJECT</strong>) plus the full agent trace.</p>
+
+    <div class="callout ok">
+      <i class="fa-solid fa-layer-group"></i>
+      <p><strong>Scan the same code as many times as you have units.</strong> Each IN adds one to the
+         quantity, each OUT removes one. An OUT is only refused when the quantity is already zero.</p>
+    </div>
+
+    <div class="callout">
+      <i class="fa-solid fa-barcode"></i>
+      <p><strong>The product number is what identifies a product.</strong> Scanning a plain barcode, or
+         typing just a product number, matches whatever product already carries that number &mdash; it
+         adds to or removes from the existing stock and keeps its name, category and batch. Only a
+         product number never seen before shows as <code>Unknown Item</code>, and you can click
+         <strong>name it</strong> in the inventory table to fix that for good.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><i class="fa-solid fa-tags"></i> Managing categories</h2>
+    <p>You own the category list &mdash; the AI never files a product for you. Use the
+       <strong>Categories</strong> panel at the bottom of the dashboard.</p>
+
+    <div class="tblwrap">
+      <table>
+        <tr><th>Task</th><th>How</th></tr>
+        <tr><td><strong>Add a category</strong></td>
+            <td>Type a name in the Categories panel and click <strong>Add category</strong>.</td></tr>
+        <tr><td><strong>Rename or delete</strong></td>
+            <td>Use the <strong>rename</strong> / <strong>delete</strong> links on the row. Deleting moves
+                its products to <code>Uncategorised</code> rather than losing them.</td></tr>
+        <tr><td><strong>File a product</strong></td>
+            <td>Scan it, then pick a category in the prompt on the result panel and click
+                <strong>Save</strong>. Or assign it later from the
+                <strong>Products waiting for a category</strong> list.</td></tr>
+      </table>
+    </div>
+
+    <div class="callout">
+      <i class="fa-solid fa-circle-info"></i>
+      <p>A product the system has not seen before is filed as <code>Uncategorised</code> and the
+         classifier offers a <em>suggestion</em> next to it. Your choice always wins, and it is
+         remembered for every future scan of that product.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><i class="fa-solid fa-triangle-exclamation"></i> Low stock alerts &amp; batches</h2>
+
+    <h3>Get warned before you run out</h3>
+    <p>In the <strong>Live inventory</strong> table, type a number in the <strong>Reorder at</strong>
+       column for any product. When stock falls to that number or below, a
+       <strong>Low stock</strong> panel appears at the top of the dashboard.
+       Set it back to <code>0</code> to switch the alert off.</p>
+
+    <div class="callout ok">
+      <i class="fa-solid fa-chart-line"></i>
+      <p>The Forecast Agent also uses this level &mdash; it estimates how many days until
+         a product hits its reorder point, not just until it hits zero.</p>
+    </div>
+
+    <h3>Batch tracking</h3>
+    <p>The batch number in a QR code (<code>name,<strong>batch</strong>,productno</code>) is now tracked.
+       Stock of one product is held per batch, and the inventory table shows the split
+       underneath the product name.</p>
+    <pre><code>Router   Networking   qty 3
+  BATCH-A - 2    BATCH-B - 1</code></pre>
+    <p>Scanning OUT removes from the batch you scanned. If that batch is empty, the oldest
+       batch still holding stock is used instead (<strong>FIFO</strong>) and the result panel
+       tells you which batch it took.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><i class="fa-solid fa-rotate-left"></i> Fixing mistakes</h2>
+
+    <h3>Undo the last scan</h3>
+    <p>Click <strong>Undo last scan</strong> above the Recent activity table. It tells you exactly what
+       it will reverse before you click. The undone scan stays in the audit trail, struck through,
+       and the reversal is logged separately &mdash; nothing is ever silently erased.</p>
+
+    <div class="callout warn">
+      <i class="fa-solid fa-triangle-exclamation"></i>
+      <p>Undo only reverses the <strong>single most recent</strong> scan. If those units have since
+         been taken out, it refuses rather than pushing the count negative &mdash; correct the
+         quantity by hand instead.</p>
+    </div>
+
+    <h3>Correct a quantity by hand</h3>
+    <p>In the <strong>Live inventory</strong> table, every batch under a product name has an editable
+       number. Type the true counted quantity and press Enter or click away. It saves immediately and
+       is recorded in the activity log as <code>ADJUST</code>, so a manual override is never mistaken
+       for a scan.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><i class="fa-solid fa-vial"></i> Check everything works</h2>
+    <p>The self-test runs the whole pipeline on a throwaway database. No browser needed.</p>
+    <pre><code>python verify.py</code></pre>
+    <p>Expect <code>ALL CHECKS PASSED</code>. If a check fails, its name tells you what broke.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><i class="fa-solid fa-robot"></i> Optional: the Claude assistant</h2>
+    <p>The app has a built-in offline assistant that works with no setup. To upgrade it to Claude,
+       install the package and set your API key:</p>
+    <pre><code>pip install anthropic
+set ANTHROPIC_API_KEY=sk-ant-...     (Windows)
+export ANTHROPIC_API_KEY=sk-ant-...  (macOS / Linux)
+python app.py</code></pre>
+    <div class="callout">
+      <i class="fa-solid fa-circle-info"></i>
+      <p>Without a key the assistant still answers, just locally. That is expected, not an error.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><i class="fa-solid fa-wrench"></i> If something goes wrong</h2>
+    <div class="tblwrap">
+      <table>
+        <tr><th>Problem</th><th>Fix</th></tr>
+        <tr><td><code>python</code> not found</td>
+            <td>Install Python and add it to PATH, or try <code>py app.py</code> / <code>python3 app.py</code>.</td></tr>
+        <tr><td>Port 8000 already in use</td>
+            <td>Run <code>set PORT=8010 &amp; python app.py</code>, then open <code>http://localhost:8010</code>.</td></tr>
+        <tr><td>Camera will not start</td>
+            <td>Allow camera permission and close other apps using the webcam. You can still use the sample chips and manual box.</td></tr>
+        <tr><td>No camera on phone</td>
+            <td>Expected on plain HTTP. The camera needs HTTPS or localhost.</td></tr>
+        <tr><td>Want a clean database</td>
+            <td>Stop the server, delete <code>data/warehouse.db*</code>, start again. It is recreated automatically.</td></tr>
+        <tr><td>Empty boxes instead of icons here</td>
+            <td>This page loads Font Awesome from the internet. Cosmetic only &mdash; the app's own icons are local.</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><i class="fa-solid fa-folder-open"></i> Where to read more</h2>
+    <div class="tblwrap">
+      <table>
+        <tr><th>File</th><th>What it covers</th></tr>
+        <tr><td><code>SETUP.md</code></td><td>Full install walkthrough on a fresh machine.</td></tr>
+        <tr><td><code>MVP.md</code></td><td>Product detail and measured accuracy.</td></tr>
+        <tr><td><code>PROJECT.md</code></td><td>Project background.</td></tr>
+        <tr><td><code>reports/Warehouse_MVP_Manual.html</code></td><td>Complete user manual for the app.</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Agentic Warehouse MVP &mdash; camera-based scanner with a five-agent AI pipeline.</span>
+    <span>Runs on the Python standard library.</span>
+  </div>
+</footer>
+
+</body>
+</html>

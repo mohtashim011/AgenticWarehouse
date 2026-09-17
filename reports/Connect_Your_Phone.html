@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Using your phone as a scanner — Agentic Warehouse</title>
+<!--
+  Written for warehouse staff, not for developers.
+
+  Unlike the other documents in reports/, this one loads NO stylesheet and NO
+  icon font from the internet. Every icon below is inline SVG. This is the sheet
+  somebody reads when the network is the thing that is not working, and a guide
+  whose icons fail to load at exactly that moment would be a poor joke. It also
+  means it can be printed and pinned up next to the goods-in bench.
+-->
+<style>
+  :root{
+    --navy:#0f2140;--navy2:#1b3563;--blue:#2e5cb8;--red:#c0392b;--green:#1c7a54;
+    --amber:#b5810b;--bg:#eef1f6;--card:#fff;--line:#e3e8f0;
+    --muted:#5c6675;--ink:#1c2431;--soft:#f4f6fb;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.62;font-size:15.5px;}
+  a{color:var(--blue);}
+  .wrap{max-width:920px;margin:0 auto;padding:0 20px;}
+  svg.ic{width:1em;height:1em;vertical-align:-0.125em;flex:0 0 auto;}
+
+  header.hero{background:linear-gradient(135deg,var(--navy),var(--navy2) 60%,#26467e);color:#fff;
+    padding:46px 0 38px;position:relative;overflow:hidden;}
+  header.hero::after{content:"";position:absolute;right:-90px;top:-90px;width:340px;height:340px;
+    border-radius:50%;background:radial-gradient(circle,rgba(46,92,184,.4),transparent 70%);}
+  .badge{display:inline-block;background:var(--blue);color:#fff;font-size:12px;letter-spacing:1.3px;
+    font-weight:700;padding:6px 14px;border-radius:30px;text-transform:uppercase;}
+  header.hero h1{font-size:30px;margin:16px 0 8px;max-width:760px;}
+  header.hero p.sub{font-size:16px;color:#c6d2e6;max-width:700px;margin:0;}
+
+  nav.toc{position:sticky;top:0;z-index:20;background:rgba(15,33,64,.97);
+    border-bottom:1px solid rgba(255,255,255,.08);}
+  nav.toc .wrap{display:flex;gap:5px;flex-wrap:wrap;padding:10px 20px;}
+  nav.toc a{color:#c6d2e6;text-decoration:none;font-size:13px;font-weight:600;
+    padding:6px 11px;border-radius:8px;white-space:nowrap;}
+  nav.toc a:hover{background:rgba(255,255,255,.1);color:#fff;}
+
+  section{padding:38px 0;border-bottom:1px solid var(--line);}
+  section:nth-of-type(even){background:#fff;}
+  h2{font-size:23px;color:var(--navy);margin:0 0 6px;display:flex;align-items:center;gap:12px;}
+  h2 .num{background:var(--blue);color:#fff;width:36px;height:36px;border-radius:10px;flex:0 0 auto;
+    display:inline-flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;}
+  h2 + .lead{color:var(--muted);margin:0 0 22px;max-width:760px;}
+  h3{font-size:17px;color:var(--navy2);margin:24px 0 10px;display:flex;align-items:center;gap:9px;}
+  h3 svg.ic{color:var(--blue);}
+  p{margin:0 0 13px;}
+
+  .step{display:flex;gap:16px;background:var(--card);border:1px solid var(--line);
+    border-radius:12px;padding:18px 20px;margin-bottom:14px;}
+  .step .n{background:var(--navy);color:#fff;width:30px;height:30px;border-radius:8px;
+    flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+    font-weight:700;font-size:14px;}
+  .step h4{margin:2px 0 6px;font-size:16px;color:var(--navy2);}
+  .step p:last-child{margin-bottom:0;}
+
+  .note{border-left:4px solid var(--blue);background:var(--soft);border-radius:0 10px 10px 0;
+    padding:14px 18px;margin:16px 0;}
+  .note.warn{border-left-color:var(--amber);background:#fdf7e7;}
+  .note.stop{border-left-color:var(--red);background:#fdeeec;}
+  .note.good{border-left-color:var(--green);background:#eaf6f1;}
+  .note b{display:block;margin-bottom:3px;}
+  .note p:last-child{margin-bottom:0;}
+
+  table{width:100%;border-collapse:collapse;background:var(--card);
+    border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:16px 0;}
+  th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{background:var(--soft);color:var(--navy);font-size:13px;text-transform:uppercase;
+    letter-spacing:.05em;}
+  tr:last-child td{border-bottom:0;}
+  td.sym{width:38%;font-weight:600;color:var(--navy2);}
+
+  .write-in{background:#fff;border:2px dashed var(--blue);border-radius:12px;
+    padding:18px 20px;margin:18px 0;}
+  .write-in .line{border-bottom:2px solid var(--line);height:34px;margin-top:6px;}
+  .write-in small{color:var(--muted);}
+
+  code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13.5px;
+    background:#eaeef6;border-radius:5px;padding:2px 6px;}
+  .big-url{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    font-size:20px;font-weight:700;color:var(--navy);background:#fff;
+    border:1px solid var(--line);border-radius:10px;padding:14px 16px;
+    display:inline-block;user-select:all;}
+
+  footer{background:var(--navy);color:#c6d2e6;padding:26px 0;font-size:14px;}
+  footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+
+  @media print{
+    body{background:#fff;font-size:12pt;}
+    nav.toc{display:none;}
+    header.hero{background:var(--navy);padding:24px 0;}
+    section{padding:18px 0;break-inside:avoid;}
+    .step,.note,table{break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">Agentic Warehouse</span>
+    <h1>Using your phone as a scanner</h1>
+    <p class="sub">
+      Your phone can scan stock in and out exactly like the computer at the bench.
+      This takes about two minutes to set up, once.
+    </p>
+  </div>
+</header>
+
+<nav class="toc">
+  <div class="wrap">
+    <a href="#need">What you need</a>
+    <a href="#steps">Connecting</a>
+    <a href="#scanning">Scanning well</a>
+    <a href="#stops">If the camera stops</a>
+    <a href="#problems">Problems</a>
+    <a href="#ask">What to ask for</a>
+  </div>
+</nav>
+
+<!-- 1 ------------------------------------------------------------------ -->
+<section id="need">
+  <div class="wrap">
+    <h2><span class="num">1</span> What you need</h2>
+    <p class="lead">Three things, and nothing to install.</p>
+
+    <table>
+      <tr>
+        <td class="sym">A phone with a camera</td>
+        <td>Any reasonably modern Android phone or iPhone. You do <strong>not</strong>
+            install an app — the warehouse system opens in the phone's own web browser.</td>
+      </tr>
+      <tr>
+        <td class="sym">The warehouse Wi-Fi</td>
+        <td>The phone must be on the <strong>same Wi-Fi</strong> as the computer running
+            the system. Mobile data will not work: the system is on your own network, not
+            on the internet.</td>
+      </tr>
+      <tr>
+        <td class="sym">Your own login</td>
+        <td>The same username and password you use on the computer. Every scan is recorded
+            against the person who made it, so never use somebody else's.</td>
+      </tr>
+    </table>
+
+    <div class="note good">
+      <b>Your stock data never leaves the building.</b>
+      <p>The phone talks directly to the warehouse computer over your own Wi-Fi. Nothing is
+      sent to the internet, and the system keeps working if the internet goes down.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 2 ------------------------------------------------------------------ -->
+<section id="steps">
+  <div class="wrap">
+    <h2><span class="num">2</span> Connecting, step by step</h2>
+    <p class="lead">You only do this once per phone. After that, save it as a bookmark.</p>
+
+    <div class="step">
+      <span class="n">1</span>
+      <div>
+        <h4>Join the warehouse Wi-Fi</h4>
+        <p>Open the phone's settings and connect to the same Wi-Fi network the warehouse
+        computer uses. If you are not sure which one, ask your supervisor.</p>
+        <p><strong>Turn mobile data off</strong> while you do this the first time. Some
+        phones quietly prefer mobile data and then cannot find the warehouse computer.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="n">2</span>
+      <div>
+        <h4>Scan the square code on the computer screen</h4>
+        <p>On the warehouse computer, open the page your supervisor points you at — it
+        shows a large square code. Point your phone's normal camera app at it, and tap the
+        link the phone offers.</p>
+        <p>If your phone will not read it, type the address in the phone's browser instead.
+        It is written on the computer screen underneath the code, and looks like
+        <code>https://10.0.0.29:8443</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="n">3</span>
+      <div>
+        <h4>Accept the security warning — once</h4>
+        <p>The phone will say the connection is not private, or that the certificate is not
+        trusted. <strong>This is expected here and it is safe.</strong> Tap
+        <em>Advanced</em>, then <em>Continue</em> or <em>Proceed</em>.</p>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <b>Why the warning appears, in one sentence.</b>
+      <p>That warning normally means "this website has not proved who it is to an outside
+      authority". Your warehouse computer is on your own network and has no way to prove
+      itself to an outside authority, so it signs its own certificate. You are being warned
+      about a machine standing a few metres away from you. Accept it once and the phone
+      remembers.</p>
+    </div>
+
+    <div class="step">
+      <span class="n">4</span>
+      <div>
+        <h4>Sign in</h4>
+        <p>Use your own username and password. If this is your first sign-in, the system
+        will make you choose a new password before you can do anything — that is deliberate,
+        because the password you were given is known to whoever gave it to you.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="n">5</span>
+      <div>
+        <h4>Open Scanner and allow the camera</h4>
+        <p>Tap <strong>Scanner</strong> in the menu, then <strong>Start camera</strong>.
+        The phone will ask for permission to use the camera. Tap <strong>Allow</strong>.</p>
+        <p>If you tap Block by mistake, the camera will never start. Fix it in the browser's
+        site settings, or close the page and open it again.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="n">6</span>
+      <div>
+        <h4>Choose Stock IN or Stock OUT, then scan</h4>
+        <p>The two large buttons at the top decide what a scan means. Check you are on the
+        right one <em>before</em> you start — this is the single easiest mistake to make.</p>
+        <p>Hold a label in front of the camera. A small message appears in the corner saying
+        what was counted and how many are now on hand, then clears itself so you can scan
+        the next one.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>Save it as a bookmark.</b>
+      <p>Add the page to your phone's home screen and you will never have to scan the square
+      code again. On Android: menu, then <em>Add to Home screen</em>. On iPhone: the share
+      button, then <em>Add to Home Screen</em>.</p>
+    </div>
+
+    <div class="write-in">
+      <strong>Write your warehouse address here</strong><br />
+      <small>Your supervisor can read it off the computer. It changes if the router is
+      replaced.</small>
+      <div class="line"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 ------------------------------------------------------------------ -->
+<section id="scanning">
+  <div class="wrap">
+    <h2><span class="num">3</span> Getting a good read every time</h2>
+    <p class="lead">Most failed scans are one of these four things.</p>
+
+    <table>
+      <tr>
+        <th>Do this</th>
+        <th>Why it matters</th>
+      </tr>
+      <tr>
+        <td class="sym">Use the back camera</td>
+        <td>The front camera is lower quality and hard to aim. If the picture shows your own
+            face, switch camera using the list under the viewfinder.</td>
+      </tr>
+      <tr>
+        <td class="sym">Hold the label level</td>
+        <td>A barcode is read line by line across the bars, so a tilted label may never
+            read at all. Square it up with the top of the screen. QR codes do not care about
+            angle — that is why they are worth using where you can.</td>
+      </tr>
+      <tr>
+        <td class="sym">Fill the frame</td>
+        <td>Move close enough that the label spans most of the width. Thin bars need
+            pixels. If you cannot get closer, use the zoom slider.</td>
+      </tr>
+      <tr>
+        <td class="sym">Get light on it, not glare</td>
+        <td>Use the torch button in poor light. Avoid shiny plastic wrap reflecting a
+            ceiling lamp straight back — tilt the box slightly instead of the label.</td>
+      </tr>
+    </table>
+
+    <h3>Counting several of the same item</h3>
+    <p>Holding one label in front of the camera counts <strong>one</strong> item, however long
+    you hold it there. That is on purpose — otherwise a box left in front of the lens would
+    add a dozen units a second.</p>
+    <p>To count five identical boxes, present each one separately, or take the label away and
+    bring it back. If you are counting quickly and a scan does not seem to register, wait a
+    moment: there is a short delay before the same code counts again.</p>
+  </div>
+</section>
+
+<!-- 4 ------------------------------------------------------------------ -->
+<section id="stops">
+  <div class="wrap">
+    <h2><span class="num">4</span> If the camera stops working</h2>
+    <p class="lead">Work does not stop. There are three other ways in, and the system moves
+    between them for you.</p>
+
+    <div class="step">
+      <span class="n">1</span>
+      <div>
+        <h4>It switches to the backup camera by itself</h4>
+        <p>If the camera fails or simply stops reading anything, the system switches to
+        another camera on that phone and tells you it has done so, and why. You do not have
+        to do anything. If it cannot switch, it says that too.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="n">2</span>
+      <div>
+        <h4>Take a photo instead</h4>
+        <p>Tap <strong>Scan a photo</strong>. A still photo is much sharper than a live
+        preview, so this often reads a worn or curved label that the live camera cannot.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <span class="n">3</span>
+      <div>
+        <h4>Type the number in</h4>
+        <p>Tap <strong>Type a code</strong> and enter the number printed under the barcode.
+        This always works, whatever the cameras are doing. It is never disabled.</p>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>If a code will not match anything</b>
+      <p>The system tries to repair damaged and misread codes automatically. If it is not
+      certain, it shows you a short list of what it thinks the code might have been — pick
+      the right one, or type it in. It will never guess silently and put stock on the wrong
+      product.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 ------------------------------------------------------------------ -->
+<section id="problems">
+  <div class="wrap">
+    <h2><span class="num">5</span> When something goes wrong</h2>
+    <p class="lead">Find what you are seeing in the left column.</p>
+
+    <table>
+      <tr>
+        <th>What you see</th>
+        <th>What to do</th>
+      </tr>
+      <tr>
+        <td class="sym">The page will not load at all</td>
+        <td>Check the phone is on the warehouse Wi-Fi and not on mobile data or a guest
+            network. Guest Wi-Fi deliberately hides devices from each other. If it still
+            fails, the warehouse computer may be switched off — check with your supervisor.</td>
+      </tr>
+      <tr>
+        <td class="sym">"Your connection is not private"</td>
+        <td>Expected. Tap <em>Advanced</em>, then continue. See step 3 above.</td>
+      </tr>
+      <tr>
+        <td class="sym">The page loads but the camera will not start</td>
+        <td>Either you tapped Block when asked for permission, or the system was started
+            without the secure setting. Try closing the page and opening it again first; if
+            that does not help, tell your supervisor the server needs starting with
+            <code>--https</code>.</td>
+      </tr>
+      <tr>
+        <td class="sym">"Another application is using it"</td>
+        <td>Close anything else on the phone that uses the camera — a video call, the camera
+            app itself — and press Start camera again.</td>
+      </tr>
+      <tr>
+        <td class="sym">The picture is live but nothing ever reads</td>
+        <td>Check you are on the back camera, get closer so the label fills the width, hold
+            it level, and try the torch. If it still reads nothing after a few seconds the
+            system will offer another camera by itself.</td>
+      </tr>
+      <tr>
+        <td class="sym">"Already counted"</td>
+        <td>Not an error. You presented the same label twice within a few seconds. Take it
+            away and bring it back to count another one.</td>
+      </tr>
+      <tr>
+        <td class="sym">A scan was refused</td>
+        <td>Read the message — it says why. Usually it is stock going OUT when there is none
+            on hand. Nothing was changed.</td>
+      </tr>
+      <tr>
+        <td class="sym">You scanned the wrong direction</td>
+        <td>Tap the message to open the scan, then <strong>Undo</strong>. The correction is
+            recorded as its own entry; nothing is erased, and that is normal.</td>
+      </tr>
+      <tr>
+        <td class="sym">It worked yesterday, not today</td>
+        <td>The address can change when the router restarts. Scan the square code again to
+            get the current one, and replace your bookmark.</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- 6 ------------------------------------------------------------------ -->
+<section id="ask">
+  <div class="wrap">
+    <h2><span class="num">6</span> What to ask your supervisor for</h2>
+    <p class="lead">If you are stuck, these are the exact words that will get it fixed
+    fastest.</p>
+
+    <table>
+      <tr>
+        <td class="sym">"What is the warehouse address for my phone?"</td>
+        <td>They can read it off the computer at any time — it is shown on screen with the
+            square code.</td>
+      </tr>
+      <tr>
+        <td class="sym">"Can you start the server with <code>--https</code>?"</td>
+        <td>Say this if the page opens but the camera refuses to start. Phones will not
+            allow camera access otherwise. It is a phone rule, not a setting anyone here
+            chose.</td>
+      </tr>
+      <tr>
+        <td class="sym">"Can you allow Python through the firewall?"</td>
+        <td>Say this if the page will not load at all even though you are on the right
+            Wi-Fi.</td>
+      </tr>
+      <tr>
+        <td class="sym">"My login does not work."</td>
+        <td>Accounts lock for ten minutes after five wrong attempts. Wait, or ask for an
+            unlock and a password reset.</td>
+      </tr>
+    </table>
+
+    <div class="note good">
+      <b>One last thing worth knowing.</b>
+      <p>Your phone is a full workstation, not a camera plugged into the computer. Anything
+      you scan appears on the warehouse dashboard straight away, and anything a colleague
+      scans appears on your phone. You are both writing to the same stock record.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Agentic Warehouse — using your phone as a scanner</span>
+    <span>Keep this sheet by the goods-in bench.</span>
+  </div>
+</footer>
+
+</body>
+</html>

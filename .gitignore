@@ -1,0 +1,13 @@
+# The runtime database is created on first run; it is not part of the delivery.
+data/*.db
+data/*.db-wal
+data/*.db-shm
+
+# Generated at runtime on this machine.
+data/cert.pem
+data/key.pem
+data/cert.host
+
+# Bytecode.
+__pycache__/
+*.pyc

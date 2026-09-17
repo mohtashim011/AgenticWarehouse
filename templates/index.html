@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agentic Warehouse — AI Scanner MVP</title>
+<link rel="stylesheet" href="/static/styles.css" />
+<!-- Font Awesome (accent icons) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+<!-- Scanner engine (vendored, offline) -->
+<script src="/static/html5-qrcode.min.js"></script>
+<!-- Lucide icon set (vendored, offline) -->
+<script src="/static/lucide.min.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">
+      <span class="logo"><i class="fa-solid fa-warehouse"></i></span>
+      <div>
+        <h1>Agentic AI for Multi-Agent Collaboration in Warehouse Management Systems </h1>
+        <p>Camera-based QR &amp; barcode capture, processed by a cooperating multi-agent AI pipeline.</p>
+      </div>
+    </div>
+    <div class="statbar" id="statbar">
+      <div class="s"><b>0</b><span>In stock</span></div>
+      <div class="s"><b>0</b><span>Scans</span></div>
+      <div class="s"><b>0</b><span>Categories</span></div>
+      <div class="s"><b>0</b><span>Anomalies</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- pipeline overview strip -->
+<section class="wrap">
+  <div class="pipeline-strip" id="pipelineStrip">
+    <div class="pnode"><i data-lucide="scan-line"></i><span>Scanner</span><small>parse &amp; validate</small></div>
+    <i data-lucide="chevron-right" class="parrow"></i>
+    <div class="pnode"><i data-lucide="tags"></i><span>Classifier</span><small>ML category</small></div>
+    <i data-lucide="chevron-right" class="parrow"></i>
+    <div class="pnode"><i data-lucide="boxes"></i><span>Inventory</span><small>IN / OUT decision</small></div>
+    <i data-lucide="chevron-right" class="parrow"></i>
+    <div class="pnode"><i data-lucide="shield-alert"></i><span>Anomaly</span><small>statistical check</small></div>
+    <i data-lucide="chevron-right" class="parrow"></i>
+    <div class="pnode"><i data-lucide="trending-up"></i><span>Forecast</span><small>stock-out ETA</small></div>
+  </div>
+</section>
+
+<main class="wrap grid">
+  <!-- LEFT: scanner -->
+  <section class="card scanner">
+    <div class="card-head">
+      <i data-lucide="camera"></i>
+      <div>
+        <h2>Capture</h2>
+        <p class="sub">Point the camera at a label, or enter a code manually. Choose whether the item is arriving or leaving.</p>
+      </div>
+    </div>
+
+    <div class="field-label"><i data-lucide="git-compare-arrows"></i> Direction</div>
+    <div class="mode-toggle">
+      <button id="modeIn" class="mode active" data-mode="IN">
+        <i data-lucide="arrow-down-to-line"></i> Stock&nbsp;IN
+        <small>Item arriving into the warehouse</small>
+      </button>
+      <button id="modeOut" class="mode" data-mode="OUT">
+        <i data-lucide="arrow-up-from-line"></i> Stock&nbsp;OUT
+        <small>Item leaving the warehouse</small>
+      </button>
+    </div>
+
+    <div class="field-label"><i data-lucide="video"></i> Live camera</div>
+    <div id="reader"></div>
+    <div class="cam-controls">
+      <button id="startBtn" class="btn primary"><i data-lucide="play"></i> Start camera</button>
+      <button id="stopBtn" class="btn" disabled><i data-lucide="square"></i> Stop</button>
+      <label class="btn" for="photoInput" title="Decode a photo instead of the live camera">
+        <i data-lucide="image"></i> Scan a photo</label>
+      <input id="photoInput" type="file" accept="image/*" capture="environment" hidden />
+    </div>
+
+    <div id="zoomRow" class="zoom-row" hidden>
+      <label for="zoomRange"><i data-lucide="zoom-in"></i> Zoom</label>
+      <input id="zoomRange" type="range" min="1" max="4" step="0.1" value="1" />
+      <span id="zoomVal">1.0x</span>
+      <small>Zoom in until the barcode fills the width &mdash; thin bars need pixels.</small>
+    </div>
+    <div id="camStatus" class="cam-status" hidden></div>
+    <p class="hint"><i data-lucide="barcode"></i>
+      <b>Barcode not reading?</b> Hold it <b>level, not tilted</b>, fill the frame, and use the
+      <b>zoom</b> slider. Barcodes are read line by line, so a tilted label never decodes &mdash;
+      QR codes are rotation-proof, which is why they scan at any angle. If a webcam still cannot
+      focus on the thin bars, use <b>Scan a photo</b>: a phone photo is far sharper.</p>
+    <p class="hint"><i data-lucide="info"></i>
+      Laptop webcam works on <code>localhost</code>. Phone cameras require HTTPS
+      (see the README for the tunnel option).</p>
+
+    <div class="manual">
+      <div class="field-label"><i data-lucide="keyboard"></i> Manual entry / test</div>
+      <p class="muted">QR format <code>name,batch,productno</code> &nbsp;·&nbsp; or a plain barcode number.</p>
+      <div class="manual-row">
+        <input id="manualCode" type="text" placeholder="ONT,BATCH01,900001    or    8901234567890" />
+        <button id="manualBtn" class="btn primary"><i data-lucide="search"></i> Scan</button>
+      </div>
+      <div class="samples">
+        <span><i data-lucide="sparkles"></i> Quick samples</span>
+        <button class="chip" data-code="ONT,BATCH01,900001">ONT</button>
+        <button class="chip" data-code="Optical Fiber Cable,BATCH02,900002">Fiber Cable</button>
+        <button class="chip" data-code="IPTV Device,BATCH03,900003">IPTV Device</button>
+        <button class="chip" data-code="Universal Remote,BATCH04,900004">Remote</button>
+        <button class="chip" data-code="8901234567890">Raw Barcode</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT: last result + agent trace -->
+  <section class="card result">
+    <div class="card-head">
+      <i data-lucide="cpu"></i>
+      <div>
+        <h2>AI Pipeline — last scan</h2>
+        <p class="sub">Each agent makes an independent decision and passes it on. Their combined verdict is shown at the top.</p>
+      </div>
+    </div>
+    <div id="verdict" class="verdict empty">
+      <i data-lucide="scan"></i> Scan an item to see the agents work.
+    </div>
+    <div id="trace" class="trace"></div>
+  </section>
+</main>
+
+<!-- low stock alerts -->
+<section class="wrap">
+  <div id="lowStockCard" class="card low-card" hidden>
+    <div class="card-head">
+      <i data-lucide="triangle-alert"></i>
+      <div>
+        <h2>Low stock <span id="lowCount" class="count-pill"></span></h2>
+        <p class="sub">Products at or below the reorder level you set. Set a level in the Reorder column below.</p>
+      </div>
+    </div>
+    <table id="lowTable">
+      <thead><tr><th>Product</th><th>Category</th><th class="num">On hand</th><th class="num">Reorder at</th><th>Status</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- charts -->
+<section class="wrap grid">
+  <div class="card">
+    <div class="card-head">
+      <i data-lucide="chart-column"></i>
+      <div>
+        <h2>Stock by category</h2>
+        <p class="sub">Units on hand in each category. The inventory table below is the same data in full.</p>
+      </div>
+    </div>
+    <div id="catChart" class="chart"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <i data-lucide="chart-line"></i>
+      <div>
+        <h2>Activity &mdash; last 7 days</h2>
+        <p class="sub">Scans per day. Reversed scans are excluded.</p>
+      </div>
+    </div>
+    <div class="legend">
+      <span><i class="swatch s-in"></i>Stock IN</span>
+      <span><i class="swatch s-out"></i>Stock OUT</span>
+    </div>
+    <div id="actChart" class="chart"></div>
+    <div class="stat-tiles">
+      <div class="tile"><b id="tileIn">0</b><span>IN scans</span></div>
+      <div class="tile"><b id="tileOut">0</b><span>OUT scans</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="wrap grid">
+  <!-- inventory -->
+  <div class="card">
+    <div class="card-head">
+      <i data-lucide="package"></i>
+      <div>
+        <h2>Live inventory</h2>
+        <p class="sub">On-hand quantity per product, broken down by batch. Set a reorder level to get an alert.</p>
+      </div>
+      <a class="btn head-btn" href="/api/export/inventory.csv"><i data-lucide="download"></i> CSV</a>
+    </div>
+    <table id="invTable">
+      <thead><tr><th>Product</th><th>Category</th><th class="num">Qty</th><th class="num">Reorder&nbsp;at</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- logs -->
+  <div class="card">
+    <div class="card-head">
+      <i data-lucide="history"></i>
+      <div>
+        <h2>Recent activity</h2>
+        <p class="sub">A chronological audit trail of every scan and its outcome, including anomaly flags.</p>
+      </div>
+    </div>
+    <div class="undo-bar">
+      <button id="undoBtn" class="btn" disabled><i data-lucide="undo-2"></i> Undo last scan</button>
+      <span id="undoWhat" class="muted"></span>
+    </div>
+    <div class="filter-row">
+      <input id="logSearch" type="text" placeholder="Search product, product no. or batch" />
+      <select id="logAction">
+        <option value="">All actions</option>
+        <option value="IN">IN</option>
+        <option value="OUT">OUT</option>
+        <option value="REJECT">REJECT</option>
+        <option value="ADJUST">ADJUST</option>
+        <option value="UNDO">UNDO</option>
+      </select>
+      <a id="exportLogs" class="btn" href="/api/export/logs.csv"><i data-lucide="download"></i> CSV</a>
+    </div>
+    <table id="logTable">
+      <thead><tr><th>Action</th><th>Product</th><th>Product&nbsp;No.</th><th class="num">Flag</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- category management -->
+<section class="wrap">
+  <div class="card">
+    <div class="card-head">
+      <i data-lucide="tags"></i>
+      <div>
+        <h2>Categories</h2>
+        <p class="sub">You own the category list. Anything you assign here is remembered and always
+          overrides the classifier's suggestion.</p>
+      </div>
+    </div>
+
+    <div class="cat-add">
+      <input id="newCat" type="text" placeholder="New category name" />
+      <button id="addCatBtn" class="btn primary"><i data-lucide="plus"></i> Add category</button>
+      <span id="catMsg" class="cat-msg"></span>
+    </div>
+
+    <table id="catTable">
+      <thead><tr><th>Category</th><th class="num">Products</th><th class="num">Units</th><th class="num">Actions</th></tr></thead>
+      <tbody></tbody>
+    </table>
+
+    <div id="uncatBox" class="uncat" hidden>
+      <div class="field-label"><i data-lucide="help-circle"></i> Products waiting for a category</div>
+      <table id="uncatTable">
+        <thead><tr><th>Product</th><th class="num">Qty</th><th>Assign to</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="wrap">
+  <div class="card assistant">
+    <div class="card-head">
+      <i data-lucide="message-square-text"></i>
+      <div>
+        <h2>Warehouse Assistant</h2>
+        <!-- <p class="sub">Ask questions in plain English about the current stock. Uses Claude when
+          <code>ANTHROPIC_API_KEY</code> is configured; otherwise a built-in offline responder answers.</p> -->
+      </div>
+    </div>
+    <div class="manual-row">
+      <input id="askInput" type="text" placeholder="How many items are in stock? Any anomalies? What is low?" />
+      <button id="askBtn" class="btn primary"><i data-lucide="send"></i> Ask</button>
+    </div>
+    <div class="ask-suggestions">
+      <button class="chip" data-q="How many items are in stock?">How many in stock?</button>
+      <button class="chip" data-q="Which categories do we have?">Which categories?</button>
+      <button class="chip" data-q="Are there any anomalies?">Any anomalies?</button>
+      <button class="chip" data-q="What products are low on stock?">What is low?</button>
+    </div>
+    <div id="answer" class="answer"><i data-lucide="corner-down-right"></i> Answers will appear here.</div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <div class="foot-grid">
+    <div>
+      <strong><i class="fa-solid fa-diagram-project"></i> Pipeline</strong>
+      Scanner &rarr; Classifier &rarr; Inventory &rarr; Anomaly &rarr; Forecast, coordinated by an orchestrator.
+    </div>
+    <div>
+      <strong><i class="fa-solid fa-microchip"></i> AI methods</strong>
+      Naive-Bayes classification, online-statistics anomaly detection, moving-average forecasting.
+    </div>
+    <div>
+      <strong><i class="fa-solid fa-shield-halved"></i> Runs offline</strong>
+      Python standard library only; scanner &amp; icons vendored locally.
+    </div>
+  </div>
+  <p class="foot-note">Agentic AI for Multi-Agent Collaboration in Warehouse Management Systems - Mohtashim Hussain</p>
+</footer>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

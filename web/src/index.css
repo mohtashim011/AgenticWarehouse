@@ -1,0 +1,202 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Theme tokens.
+ *
+ * Dark is the default because this runs on a warehouse floor: the scanner
+ * screen is looked at for long stretches, often under harsh overhead lighting,
+ * and a full-brightness white page is tiring. Light is available and complete.
+ *
+ * The semantic colours (success / warning / info) are chosen to hold up against
+ * both surfaces and to stay distinguishable for the most common forms of colour
+ * blindness -- stock IN and stock OUT must never rely on red-vs-green alone,
+ * which is why they also carry different icons and labels everywhere.
+ */
+@layer base {
+  :root {
+    --background: 210 20% 99%;
+    --foreground: 215 25% 12%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 12%;
+    --primary: 212 88% 42%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 214 20% 95%;
+    --secondary-foreground: 215 25% 20%;
+    --muted: 214 20% 95%;
+    --muted-foreground: 215 14% 42%;
+    --accent: 212 90% 96%;
+    --accent-foreground: 212 88% 32%;
+    --destructive: 0 72% 46%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 20% 88%;
+    --input: 214 20% 88%;
+    --ring: 212 88% 42%;
+    --success: 152 62% 32%;
+    --warning: 32 92% 42%;
+    --info: 212 88% 42%;
+    --radius: 0.65rem;
+  }
+
+  .dark {
+    --background: 213 32% 8%;
+    --foreground: 210 20% 94%;
+    --card: 214 28% 11%;
+    --card-foreground: 210 20% 94%;
+    --popover: 214 30% 10%;
+    --popover-foreground: 210 20% 94%;
+    --primary: 209 96% 62%;
+    --primary-foreground: 213 40% 8%;
+    --secondary: 214 22% 17%;
+    --secondary-foreground: 210 20% 92%;
+    --muted: 214 22% 16%;
+    --muted-foreground: 214 14% 62%;
+    --accent: 213 30% 18%;
+    --accent-foreground: 209 96% 70%;
+    --destructive: 0 72% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 20% 20%;
+    --input: 214 20% 22%;
+    --ring: 209 96% 62%;
+    --success: 152 58% 48%;
+    --warning: 36 94% 58%;
+    --info: 209 96% 62%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Quantities, product numbers and metrics are read as data, not prose: line
+     them up in a tabular font so digits do not jitter between rows. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  /* A visible focus ring is not decoration. Staff use this one-handed while
+     holding a box, and keyboard navigation has to be followable. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-border;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+  }
+}
+
+@layer components {
+  /* The application frame is exactly one viewport tall, so the sidebar and top
+     bar stay put and only the content column scrolls.
+     100dvh is the correct height on a phone, where the browser chrome slides
+     away and 100vh overshoots; the 100vh line before it is the fallback for
+     browsers that do not know dvh. */
+  .app-frame {
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  /* The scanner viewport. html5-qrcode injects its own <video> and a canvas;
+     these rules keep it filling the frame instead of sitting letterboxed. */
+  .scanner-frame video {
+    @apply h-full w-full rounded-lg object-cover;
+  }
+  .scanner-frame img {
+    @apply hidden;
+  }
+  .scanner-frame > div {
+    @apply !border-0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Printing
+   ========
+   Both report screens carry a Print button, and both are built out of collapsed
+   <details> and a dark themed shell. Printed as-is they produced a one-sided
+   document: every competitor's position folded away, the sidebar occupying a
+   third of the page, and dark backgrounds burning through the toner.
+
+   A comparison that prints only the flattering half is worse than one that does
+   not print at all, so the disclosures are forced open on paper. */
+@media print {
+  /* Force every collapsible open, whatever the reader left on screen. */
+  details {
+    display: block !important;
+  }
+  details > summary {
+    display: none !important;
+  }
+  details > *:not(summary) {
+    display: block !important;
+  }
+
+  /* Chrome and Firefox both honour this on the element itself. */
+  details:not([open]) > *:not(summary) {
+    display: block !important;
+  }
+
+  /* Paper is white. Print the content, not the application. */
+  :root,
+  .dark {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --muted-foreground: 0 0% 30%;
+  }
+
+  aside,
+  nav,
+  header button,
+  .no-print {
+    display: none !important;
+  }
+
+  .app-frame {
+    height: auto !important;
+    display: block !important;
+  }
+  main {
+    overflow: visible !important;
+    height: auto !important;
+    padding: 0 !important;
+  }
+
+  /* Never split a dimension across a page break: the verdict badge and the
+     reasoning that justifies it have to be readable together. */
+  .print-keep,
+  article,
+  section {
+    break-inside: avoid;
+  }
+}

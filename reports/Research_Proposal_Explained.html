@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Agentic AI for Warehouse Management — Research Proposal Explained</title>
+<style>
+  :root{
+    --navy:#12233f;
+    --navy2:#1c3560;
+    --red:#c8102e;
+    --red-soft:#f7e4e7;
+    --gold:#f0a500;
+    --ink:#1d2430;
+    --muted:#5b6675;
+    --line:#e5e9f0;
+    --bg:#f4f6fb;
+    --card:#ffffff;
+    --green:#12805c;
+    --green-soft:#e2f4ec;
+    --blue-soft:#e7eefb;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    line-height:1.65;
+    font-size:16px;
+  }
+  a{color:var(--red);}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 22px;}
+
+  /* ---------- HERO ---------- */
+  header.hero{
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,#25467a 100%);
+    color:#fff;
+    padding:54px 0 46px;
+    position:relative;
+    overflow:hidden;
+  }
+  header.hero::after{
+    content:"";
+    position:absolute;right:-80px;top:-80px;
+    width:320px;height:320px;border-radius:50%;
+    background:radial-gradient(circle,rgba(200,16,46,.35),transparent 70%);
+  }
+  .badge{
+    display:inline-block;background:var(--red);color:#fff;
+    font-size:12.5px;letter-spacing:1.5px;font-weight:700;
+    padding:6px 14px;border-radius:30px;text-transform:uppercase;
+  }
+  header.hero h1{
+    font-size:34px;line-height:1.2;margin:18px 0 10px;max-width:820px;
+  }
+  header.hero p.sub{font-size:17px;color:#cdd8ea;max-width:760px;margin:0 0 24px;}
+  .meta-grid{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:14px;max-width:820px;margin-top:8px;
+  }
+  .meta-grid .m{
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+    border-radius:12px;padding:12px 16px;
+  }
+  .meta-grid .m span{display:block;font-size:11.5px;letter-spacing:.5px;color:#9fb2cf;text-transform:uppercase;}
+  .meta-grid .m strong{font-size:15px;color:#fff;font-weight:600;}
+
+  /* ---------- NAV ---------- */
+  nav.toc{
+    position:sticky;top:0;z-index:20;
+    background:rgba(18,35,63,.97);backdrop-filter:blur(6px);
+    border-bottom:1px solid rgba(255,255,255,.08);
+  }
+  nav.toc .wrap{display:flex;gap:6px;flex-wrap:wrap;padding:10px 22px;}
+  nav.toc a{
+    color:#cdd8ea;text-decoration:none;font-size:13.5px;font-weight:600;
+    padding:7px 12px;border-radius:8px;white-space:nowrap;
+  }
+  nav.toc a:hover{background:rgba(255,255,255,.1);color:#fff;}
+
+  /* ---------- SECTION ---------- */
+  section{padding:44px 0;border-bottom:1px solid var(--line);}
+  section:nth-of-type(even){background:#fff;}
+  h2{
+    font-size:26px;color:var(--navy);margin:0 0 6px;display:flex;align-items:center;gap:12px;
+  }
+  h2 .num{
+    background:var(--red);color:#fff;font-size:15px;width:34px;height:34px;
+    display:inline-flex;align-items:center;justify-content:center;border-radius:9px;flex:0 0 auto;
+  }
+  h2 + .lead{color:var(--muted);font-size:16.5px;margin:0 0 24px;max-width:820px;}
+  h3{font-size:19px;color:var(--navy2);margin:26px 0 10px;}
+  p{margin:0 0 14px;}
+
+  .callout{
+    background:var(--red-soft);border-left:5px solid var(--red);
+    padding:16px 20px;border-radius:0 12px 12px 0;margin:20px 0;color:#5c2a30;
+  }
+  .callout.blue{background:var(--blue-soft);border-color:var(--navy2);color:#22375c;}
+  .callout.green{background:var(--green-soft);border-color:var(--green);color:#1a4d3c;}
+
+  /* cards */
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:22px;}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;
+    box-shadow:0 4px 18px rgba(20,40,80,.05);transition:.2s;
+  }
+  .card:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(20,40,80,.10);}
+  .card .ic{font-size:26px;margin-bottom:10px;display:block;}
+  .card h4{margin:0 0 8px;font-size:17px;color:var(--navy);}
+  .card p{font-size:14.5px;color:var(--muted);margin:0;}
+
+  /* table */
+  table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14.5px;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 4px 18px rgba(20,40,80,.05);}
+  th{background:var(--navy);color:#fff;text-align:left;padding:14px 16px;font-size:13.5px;letter-spacing:.4px;}
+  td{padding:13px 16px;border-top:1px solid var(--line);vertical-align:top;}
+  tr:nth-child(even) td{background:#fafbfe;}
+  td strong{color:var(--navy2);}
+
+  /* steps */
+  .steps{counter-reset:step;margin-top:22px;}
+  .step{
+    display:flex;gap:18px;padding:18px 0;border-bottom:1px dashed var(--line);align-items:flex-start;
+  }
+  .step:last-child{border-bottom:none;}
+  .step .n{
+    counter-increment:step;flex:0 0 auto;width:46px;height:46px;border-radius:12px;
+    background:linear-gradient(135deg,var(--navy2),var(--red));color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;
+  }
+  .step .n::before{content:counter(step);}
+  .step h4{margin:2px 0 5px;font-size:17px;color:var(--navy);}
+  .step p{margin:0;color:var(--muted);font-size:14.5px;}
+
+  /* timeline */
+  .timeline{margin-top:24px;position:relative;padding-left:8px;}
+  .phase{position:relative;padding:0 0 26px 34px;border-left:3px solid var(--line);}
+  .phase:last-child{border-left-color:transparent;padding-bottom:4px;}
+  .phase::before{
+    content:"";position:absolute;left:-11px;top:2px;width:19px;height:19px;border-radius:50%;
+    background:#fff;border:4px solid var(--red);
+  }
+  .phase .tag{display:inline-block;background:var(--navy);color:#fff;font-size:11.5px;font-weight:700;letter-spacing:.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase;}
+  .phase h4{margin:8px 0 4px;color:var(--navy);font-size:17px;}
+  .phase p{margin:0;color:var(--muted);font-size:14.5px;}
+
+  /* pill list */
+  .pills{display:flex;flex-wrap:wrap;gap:9px;margin:16px 0 4px;}
+  .pill{background:#fff;border:1px solid var(--line);border-radius:30px;padding:7px 15px;font-size:13.5px;color:var(--navy2);font-weight:600;}
+  .pill.red{background:var(--red);color:#fff;border-color:var(--red);}
+
+  /* flow diagram */
+  .flow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin:26px 0;}
+  .flow .box{
+    background:#fff;border:2px solid var(--navy2);border-radius:12px;padding:12px 16px;
+    text-align:center;font-weight:600;color:var(--navy);font-size:14px;min-width:120px;
+  }
+  .flow .box.red{border-color:var(--red);color:var(--red);}
+  .flow .box.gold{border-color:var(--gold);}
+  .flow .arrow{color:var(--muted);font-size:22px;font-weight:700;}
+
+  /* metric cards */
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-top:22px;}
+  .metric{background:linear-gradient(135deg,#fff,#f2f6ff);border:1px solid var(--line);border-radius:14px;padding:18px;text-align:center;}
+  .metric .big{font-size:15px;font-weight:800;color:var(--red);display:block;margin-bottom:4px;}
+  .metric small{color:var(--muted);font-size:13px;line-height:1.4;display:block;}
+
+  /* two col */
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:18px;}
+  .box-list{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;}
+  .box-list h4{margin:0 0 12px;color:var(--navy);font-size:16px;display:flex;align-items:center;gap:8px;}
+  .box-list ul{margin:0;padding-left:20px;}
+  .box-list li{margin-bottom:9px;color:var(--muted);font-size:14.5px;}
+  .box-list.bad h4{color:var(--red);}
+  .box-list.good h4{color:var(--green);}
+
+  footer{background:var(--navy);color:#b9c6dc;padding:34px 0;font-size:14px;}
+  footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center;}
+  footer strong{color:#fff;}
+  .ref{font-size:13.5px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-top:8px;}
+
+  @media(max-width:720px){
+    .twocol{grid-template-columns:1fr;}
+    header.hero h1{font-size:26px;}
+    h2{font-size:22px;}
+  }
+  @media print{
+    nav.toc{display:none;}
+    .card:hover{transform:none;}
+    section{page-break-inside:avoid;}
+  }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+<style>.card .ic{color:var(--red);} .box-list h4 i,.callout strong i,.pnode i{margin-right:2px;} nav.toc a i{margin-right:5px;}</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header class="hero">
+  <div class="wrap">
+    <span class="badge">COS700 · Research Proposal · University of Pretoria</span>
+    <h1>Agentic AI for Multi-Agent Collaboration in Warehouse Management Systems</h1>
+    <p class="sub">A simple, complete walkthrough of what this project is, what we already built that helps it,
+      and the exact modules and steps we will follow to complete the research.</p>
+    <div class="meta-grid">
+      <div class="m"><span>Student</span><strong>Mohtashim Hussain</strong></div>
+      <div class="m"><span>Student Number</span><strong>u████████</strong></div>
+      <div class="m"><span>Supervisor</span><strong>Ms. Seani Rananga</strong></div>
+      <div class="m"><span>Method</span><strong>Design Science Research</strong></div>
+    </div>
+  </div>
+</header>
+
+<!-- ================= NAV ================= -->
+<nav class="toc">
+  <div class="wrap">
+    <a href="#summary">Simple Summary</a>
+    <a href="#foundation">What We Built</a>
+    <a href="#help">How It Helps</a>
+    <a href="#problem">The Problem</a>
+    <a href="#idea">The Big Idea</a>
+    <a href="#modules">Modules</a>
+    <a href="#steps">Methodology Steps</a>
+    <a href="#plan">Project Plan</a>
+    <a href="#measure">How We Measure</a>
+    <a href="#outcome">Outcome</a>
+  </div>
+</nav>
+
+<!-- ================= SUMMARY ================= -->
+<section id="summary">
+  <div class="wrap">
+    <h2><span class="num">i</span> The Whole Project in Simple Words</h2>
+    <p class="lead">If you read only one section, read this one.</p>
+    <p>A <strong>warehouse</strong> is a big storage building where goods are kept, tracked, and moved before they
+      go to customers. Today most warehouses are run by <strong>one central computer</strong> that follows fixed
+      rules and gives orders to everything. This works fine when everything is normal — but the moment something
+      goes wrong (a rush of orders, a machine breaks, the internet drops), the whole system slows down or stops,
+      because everything depends on that one brain.</p>
+
+    <p>This research proposes a smarter way: give <strong>every part of the warehouse its own small brain</strong>.
+      A scanner, a sensor, a conveyor, a picking robot — each becomes an <strong>intelligent agent</strong> that can
+      think for itself, talk to the others, and work together as a team. This is called a
+      <strong>Multi-Agent System (MAS)</strong> powered by <strong>Agentic AI</strong>. Because there is no single
+      brain, if one part fails the rest keep working. The warehouse becomes more flexible, easier to scale, and
+      much harder to fully break.</p>
+
+    <div class="callout">
+      <strong>One-line goal:</strong> Show that a warehouse made of many cooperating AI agents (decentralised)
+      performs better, scales better, and recovers faster than a traditional single-controller warehouse
+      (centralised) — especially in tough conditions like unstable internet and power cuts common in African settings.
+    </div>
+
+    <p><strong>Why this matters to us specifically:</strong> we are not starting from zero. We already built a
+      real automated-warehouse project called <strong>AUTOWARE</strong>. That earlier work gives us proven code,
+      a working QR-scanning module, and hands-on domain knowledge. This research is the natural next step —
+      upgrading that centralised prototype into an intelligent, decentralised multi-agent system.</p>
+  </div>
+</section>
+
+<!-- ================= FOUNDATION ================= -->
+<section id="foundation">
+  <div class="wrap">
+    <h2><span class="num">1</span> What We Already Built (Our Foundation)</h2>
+    <p class="lead">The starting materials that make this research realistic and low-risk.</p>
+
+    <p>Before this proposal, the team completed an earlier engineering project, <strong>AUTOWARE — an Automated
+      Warehouse</strong> (by Mohtashim Hussain, FA20-BSE-054 and Muhammad Jawad Khan, FA20-BSE-068, supervised by
+      Dr. Faisal Sharique Butt). It lives in a public GitHub repository and has a demonstration video. This is our
+      real, working base to build on.</p>
+
+    <div class="cards">
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-box"></i></span>
+        <h4>AutoWare (core code)</h4>
+        <p>The main automation logic of a working warehouse — controlling movement, tracking, and task flow. This is
+          our ready-made <em>centralised baseline system</em>.</p>
+      </div>
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-qrcode"></i></span>
+        <h4>QR_Scanner module</h4>
+        <p>A working component that reads QR codes to identify and track items. It becomes the "eyes" of our
+          scanner / inventory agents.</p>
+      </div>
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-file-lines"></i></span>
+        <h4>Original Code.txt</h4>
+        <p>The raw source logic and algorithms — a reference we can study and re-use when rebuilding parts as agents.</p>
+      </div>
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-clapperboard"></i></span>
+        <h4>AUTOWARE demo video</h4>
+        <p>A recorded demonstration proving the concept already runs in the real world, and showing the physical
+          parts (scanners, conveyors, sensors).</p>
+      </div>
+    </div>
+
+    <div class="callout blue">
+      <strong>Repository:</strong> <a href="https://github.com/glitch047/Automated_Warehouse/tree/main" target="_blank">github.com/glitch047/Automated_Warehouse</a>
+      &nbsp;·&nbsp; <strong>Video:</strong> <a href="https://youtu.be/UjPawIVpN5E" target="_blank">youtu.be/UjPawIVpN5E</a>
+      &nbsp;·&nbsp; Licensed MIT (free to re-use and extend).
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW IT HELPS ================= -->
+<section id="help">
+  <div class="wrap">
+    <h2><span class="num">2</span> How These Materials Materially Help the Research</h2>
+    <p class="lead">Each asset directly removes work, risk, or uncertainty from the new project.</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:26%">What we have</th><th style="width:37%">How it helps the research</th><th>What it becomes in the new system</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>AUTOWARE working project</strong></td>
+          <td>Proves the warehouse concept is real and gives us a fair, honest <em>comparison baseline</em> — the "old, centralised way" we measure our new system against.</td>
+          <td>The <strong>traditional centralised system</strong> used in the comparison experiments.</td>
+        </tr>
+        <tr>
+          <td><strong>QR_Scanner module</strong></td>
+          <td>Item identification is already solved, so we don't rebuild sensing from scratch. Saves time and reduces technical risk.</td>
+          <td>The sensing ability inside the <strong>Scanner / Inventory agent</strong>.</td>
+        </tr>
+        <tr>
+          <td><strong>AutoWare core code + Original Code.txt</strong></td>
+          <td>Gives working control and task logic we can study, split up, and convert into independent agent behaviours.</td>
+          <td>Reusable logic for <strong>task handling and control</strong> across agents.</td>
+        </tr>
+        <tr>
+          <td><strong>Demo video + hardware experience</strong></td>
+          <td>Real domain knowledge of how conveyors, scanners and sensors actually behave — makes our simulation realistic and believable.</td>
+          <td>Accurate rules and timings inside the <strong>simulated environment</strong>.</td>
+        </tr>
+        <tr>
+          <td><strong>GitHub version control (MIT)</strong></td>
+          <td>The code is organised, tracked, and legally free to extend — showing prior implementation skill and lowering delivery risk.</td>
+          <td>The <strong>project base</strong> we branch the new simulation from.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout green">
+      <strong>In short:</strong> the old project gives us (a) a ready baseline to beat, (b) reusable modules like the
+      QR scanner, and (c) proven experience — so this research spends its energy on the <em>new, hard, valuable part</em>:
+      making the agents intelligent and cooperative.
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROBLEM ================= -->
+<section id="problem">
+  <div class="wrap">
+    <h2><span class="num">3</span> The Problem We Are Solving</h2>
+    <p class="lead">Why today's centralised, rule-based warehouses fall short.</p>
+
+    <div class="twocol">
+      <div class="box-list bad">
+        <h4><i class="fa-solid fa-triangle-exclamation"></i> Weaknesses of centralised systems</h4>
+        <ul>
+          <li><strong>Slow to adapt:</strong> can't react quickly to sudden demand or delays.</li>
+          <li><strong>Single point of failure:</strong> if the central controller stops, everything stops.</li>
+          <li><strong>Wasted resources:</strong> fixed rules assign tasks poorly, leaving machines idle or overloaded.</li>
+          <li><strong>Hard to scale:</strong> struggles when the warehouse grows or workload spikes.</li>
+        </ul>
+      </div>
+      <div class="box-list bad">
+        <h4><i class="fa-solid fa-earth-africa"></i> Extra challenges in African settings</h4>
+        <ul>
+          <li>Unstable or limited <strong>internet connectivity</strong>.</li>
+          <li>Frequent <strong>power outages (load-shedding)</strong>.</li>
+          <li><strong>High cost</strong> of advanced automation technology.</li>
+          <li>Limited access to <strong>AI expertise</strong>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <strong>Research Question:</strong> How can Agentic AI-based multi-agent systems improve warehouse
+      <em>efficiency</em>, <em>scalability</em>, and <em>resilience</em>?
+    </div>
+
+    <h3>The gap in existing research</h3>
+    <p>Current smart-warehouse and IoT studies improve tracking and reduce manual work, but they mostly still rely
+      on <strong>central control</strong>. The literature shows three gaps this project targets:</p>
+    <div class="pills">
+      <span class="pill">Little focus on real-time agent collaboration</span>
+      <span class="pill">Weak integration of IoT + MAS + AI learning</span>
+      <span class="pill">Almost no work on African-context conditions</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BIG IDEA ================= -->
+<section id="idea">
+  <div class="wrap">
+    <h2><span class="num">4</span> The Big Idea — Agentic AI + Multi-Agent Systems</h2>
+    <p class="lead">Turn every warehouse part into a small, smart, cooperating team-member.</p>
+
+    <p>Instead of one central brain, control is <strong>shared</strong>. Each agent senses its surroundings, decides
+      on its own, talks to nearby agents, and cooperates to finish jobs. This is a <strong>decentralised</strong>
+      design — flexible, adaptive, and fault-tolerant.</p>
+
+    <div class="flow">
+      <div class="box gold">Task arrives</div>
+      <span class="arrow">→</span>
+      <div class="box">Agents talk<br>(message passing)</div>
+      <span class="arrow">→</span>
+      <div class="box red">Best agent<br>takes the job</div>
+      <span class="arrow">→</span>
+      <div class="box">Plan a safe<br>path</div>
+      <span class="arrow">→</span>
+      <div class="box gold">Job done +<br>inventory updated</div>
+    </div>
+
+    <h3>The three main agent types</h3>
+    <div class="cards">
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-robot"></i></span>
+        <h4>Picker Agents</h4>
+        <p>Decide which items to pick and when, based on incoming tasks and their own availability.</p>
+      </div>
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-truck"></i></span>
+        <h4>Transport Agents</h4>
+        <p>Move goods around the warehouse, planning collision-free paths and cooperating to avoid jams.</p>
+      </div>
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-chart-column"></i></span>
+        <h4>Inventory Agents</h4>
+        <p>Track stock in real time (using the QR-scanning ability) and tell other agents what is where.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MODULES ================= -->
+<section id="modules">
+  <div class="wrap">
+    <h2><span class="num">5</span> The System Modules</h2>
+    <p class="lead">The building blocks that make up the simulated multi-agent warehouse.</p>
+
+    <div class="cards">
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-brain"></i></span>
+        <h4>1. Agent Module</h4>
+        <p>Defines each agent's brain: how it senses, decides, and acts independently. Includes Picker, Transport and Inventory agent behaviours.</p>
+      </div>
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-comments"></i></span>
+        <h4>2. Communication Module</h4>
+        <p>The "language" agents use to talk — message passing so they can request help, share status, and coordinate in real time.</p>
+      </div>
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-folder-tree"></i></span>
+        <h4>3. Task Allocation Module</h4>
+        <p>Decides <em>who does what</em>. Instead of fixed rules, agents negotiate to take the jobs they are best placed to do.</p>
+      </div>
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-compass"></i></span>
+        <h4>4. Path Planning Module</h4>
+        <p>Finds efficient, collision-free routes for many agents at once (multi-agent path finding), even as the layout changes.</p>
+      </div>
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-industry"></i></span>
+        <h4>5. Simulation Environment</h4>
+        <p>A virtual warehouse built in Python — layout, items, and events — where all agents live, move, and are tested.</p>
+      </div>
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-qrcode"></i></span>
+        <h4>6. Sensing / Scanner Module</h4>
+        <p>Item identification and tracking, reusing our existing <strong>QR_Scanner</strong> work as the inventory agents' eyes.</p>
+      </div>
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-chart-line"></i></span>
+        <h4>7. Evaluation Module</h4>
+        <p>Collects performance data during experiments — timing, throughput, recovery — so results can be measured and compared.</p>
+      </div>
+      <div class="card">
+        <span class="ic"><i class="fa-solid fa-scale-balanced"></i></span>
+        <h4>8. Comparison Module</h4>
+        <p>Runs the same tests on the old centralised system (AUTOWARE) versus the new MAS to prove the improvement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STEPS / METHODOLOGY ================= -->
+<section id="steps">
+  <div class="wrap">
+    <h2><span class="num">6</span> How We Complete It — Methodology Steps</h2>
+    <p class="lead">The research follows Design Science Research (DSR): build a real solution, then evaluate it. Six clear steps.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="n"></div>
+        <div>
+          <h4>System Design</h4>
+          <p>Design the multi-agent warehouse architecture and define the agent types — Picker, Transport, and Inventory agents — and how they relate.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n"></div>
+        <div>
+          <h4>Simulation Development</h4>
+          <p>Build a simulated warehouse in <strong>Python</strong>: the layout, the tasks, and how agents interact with the space and each other.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n"></div>
+        <div>
+          <h4>System Implementation</h4>
+          <p>Implement agent communication (message passing), the task-allocation strategies, and the path-planning algorithms that let agents cooperate.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n"></div>
+        <div>
+          <h4>Experimentation</h4>
+          <p>Test the system under stress: <strong>high workload</strong>, <strong>equipment/device failure</strong>, <strong>dynamic task arrivals</strong>, and <strong>limited connectivity</strong>.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n"></div>
+        <div>
+          <h4>Evaluation</h4>
+          <p>Measure performance: task completion time, resource utilisation, throughput, fault-recovery time, and scalability.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n"></div>
+        <div>
+          <h4>Comparison</h4>
+          <p>Run the same tests on a traditional centralised system and compare — proving the gains in efficiency and reliability.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PLAN ================= -->
+<section id="plan">
+  <div class="wrap">
+    <h2><span class="num">7</span> Project Plan — The Five Phases</h2>
+    <p class="lead">The timeline from research to final report.</p>
+
+    <div class="timeline">
+      <div class="phase">
+        <span class="tag">Phase 1</span>
+        <h4>Literature Review</h4>
+        <p>Study existing research on warehouse systems, multi-agent systems, and AI. Identify the research gaps this project fills.</p>
+      </div>
+      <div class="phase">
+        <span class="tag">Phase 2</span>
+        <h4>System Design</h4>
+        <p>Design the architecture of the multi-agent system. Define agent roles and how they communicate.</p>
+      </div>
+      <div class="phase">
+        <span class="tag">Phase 3</span>
+        <h4>Implementation</h4>
+        <p>Develop the simulation model and implement the algorithms for communication and task allocation.</p>
+      </div>
+      <div class="phase">
+        <span class="tag">Phase 4</span>
+        <h4>Testing &amp; Evaluation</h4>
+        <p>Run experiments under different scenarios. Collect and analyse the performance data.</p>
+      </div>
+      <div class="phase">
+        <span class="tag">Phase 5</span>
+        <h4>Final Report</h4>
+        <p>Document the results and findings, then write and submit the final research report.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MEASURE ================= -->
+<section id="measure">
+  <div class="wrap">
+    <h2><span class="num">8</span> How We Measure Success</h2>
+    <p class="lead">The key metrics that decide whether the new system truly wins.</p>
+
+    <div class="metrics">
+      <div class="metric"><span class="big"><i class="fa-solid fa-stopwatch"></i> Task Completion Time</span><small>How fast jobs finish</small></div>
+      <div class="metric"><span class="big"><i class="fa-solid fa-wrench"></i> Resource Utilisation</span><small>How well machines and agents are used</small></div>
+      <div class="metric"><span class="big"><i class="fa-solid fa-rocket"></i> System Throughput</span><small>How much work is done overall</small></div>
+      <div class="metric"><span class="big"><i class="fa-solid fa-shield-halved"></i> Fault-Recovery Time</span><small>How quickly it bounces back after a failure</small></div>
+      <div class="metric"><span class="big"><i class="fa-solid fa-chart-line"></i> Scalability</span><small>How well it copes as it grows</small></div>
+    </div>
+
+    <h3>Test scenarios</h3>
+    <div class="pills">
+      <span class="pill red">High workload</span>
+      <span class="pill red">Equipment / device failure</span>
+      <span class="pill red">Dynamic task arrivals</span>
+      <span class="pill red">Limited connectivity</span>
+    </div>
+  </div>
+</section>
+
+<!-- ================= OUTCOME ================= -->
+<section id="outcome">
+  <div class="wrap">
+    <h2><span class="num">9</span> Expected Outcome &amp; Contribution</h2>
+    <p class="lead">What this research will demonstrate.</p>
+
+    <p>The project aims to show that <strong>Agentic AI-based multi-agent systems can significantly improve warehouse
+      efficiency, scalability, and resilience</strong> compared to traditional centralised systems. Because control is
+      distributed, the warehouse keeps running even when parts fail or connectivity drops.</p>
+
+    <div class="twocol">
+      <div class="box-list good">
+        <h4><i class="fa-solid fa-circle-check"></i> What we expect to prove</h4>
+        <ul>
+          <li>Faster task completion and higher throughput.</li>
+          <li>Better use of available resources.</li>
+          <li>Quicker recovery after failures.</li>
+          <li>Smooth scaling as workload grows.</li>
+        </ul>
+      </div>
+      <div class="box-list good">
+        <h4><i class="fa-solid fa-earth-africa"></i> Why it matters</h4>
+        <ul>
+          <li>A practical, cost-effective solution for modern warehouses.</li>
+          <li>Especially valuable in developing regions with unstable power and internet.</li>
+          <li>Advances intelligent automation and multi-agent collaboration.</li>
+          <li>Builds directly on our proven AUTOWARE foundation.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Keywords</h3>
+    <div class="pills">
+      <span class="pill">Agentic AI</span>
+      <span class="pill">Multi-Agent Systems</span>
+      <span class="pill">Warehouse Management</span>
+      <span class="pill">Decentralised Systems</span>
+      <span class="pill">Smart Warehousing</span>
+      <span class="pill">Reinforcement Learning</span>
+      <span class="pill">IoT</span>
+    </div>
+
+    <h3>Reference</h3>
+    <div class="ref">
+      J. Li, D. Harabor, P. J. Stuckey, and H. Ma, "Lifelong multi-agent path finding," <em>arXiv preprint</em>, 2020.
+    </div>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <div>
+      <strong>COS700 Research Proposal</strong> — Agentic AI for Multi-Agent Collaboration in Warehouse Management Systems<br>
+      Mohtashim Hussain (u████████) · Supervisor: Ms. Seani Rananga · University of Pretoria
+    </div>
+    <div>Built from <strong>Research_Proposal_Mohtashim.docx</strong> &amp; the AUTOWARE project.</div>
+  </div>
+</footer>
+
+</body>
+</html>

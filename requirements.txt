@@ -1,0 +1,11 @@
+# Core MVP: ZERO required dependencies — runs on the Python standard library only
+# (http.server, sqlite3, json). Nothing to pip install for the scanner + AI pipeline.
+#
+# OPTIONAL — only needed if you want the Warehouse Assistant to use Claude
+# instead of the built-in offline responder:
+#
+#   pip install anthropic
+#   set ANTHROPIC_API_KEY=sk-ant-...     (Windows)
+#   export ANTHROPIC_API_KEY=sk-ant-...  (macOS/Linux)
+#
+anthropic ; python_version >= "3.8"   # optional
